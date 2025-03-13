@@ -1,19 +1,43 @@
 <?php
 
-// require the user controller so we can use it in this file
 require_once(__DIR__ . "/../controllers/UserController.php");
 
-// any request for the /users route will be handled by this function
-Route::add('/users', function () {
-    $userController = new UserController(); // create a new user controller
-    $users = $userController->getAll(); // get data data for the view
-    require_once(__DIR__ . "/../views/pages/users.php"); // load the view
-});
+Route::add('/login', function () {
+    $userController = new UserController();
+    $userController->login();
+    require_once(__DIR__. "/../views/pages/login.php");
+}, ['GET', 'POST']);
 
-// any request for a specific user will be handled by this route, i.e. /user/2
-// the dynamic part of the url path gets passed in as the $userId variable
-Route::add('/user/([a-z-0-9-]*)', function ($userId) {
-    $userController = new UserController(); // create a new user controller
-    $user = $userController->get($userId); // get data for the view
-    require_once(__DIR__ . "/../views/pages/user.php"); // load the view
-});
+Route::add('/subjects', function () {
+    require_once(__DIR__. "/../views/pages/subjects.php");
+}, ['GET', 'POST']);
+
+Route::add('/tasks', function () {
+    require_once(__DIR__. "/../views/pages/tasks.php");
+}, ['GET', 'POST']);
+Route::add('/groups', function () {
+    require_once(__DIR__. "/../views/pages/groups.php");
+}, ['GET', 'POST']);
+Route::add('/resources', function () {
+    require_once(__DIR__. "/../views/pages/resources.php");
+}, ['GET', 'POST']);
+
+Route::add('/register', function () {
+    $userController = new UserController();
+    $userController->register();
+    require_once(__DIR__. "/../views/pages/register.php");
+}, ['GET', 'POST']);
+Route::add('/admin', function () {
+    require_once(__DIR__. "/../views/pages/admin.php");
+}, ['GET', 'POST']);
+
+Route::add('/logout', function () {
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        session_unset();        // Unset all session variables
+        session_destroy();      // Destroy the session
+    }
+    header('Location: /login'); // Redirect to the login page
+    exit;
+}, 'GET');
+
+
